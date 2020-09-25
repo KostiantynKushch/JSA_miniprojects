@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { generate as id } from "shortid";
-import AppContext from '../context/AppContext'
 import PropTypes from 'prop-types'
 
 

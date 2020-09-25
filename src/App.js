@@ -42,6 +42,17 @@ const App = () => {
 		}
 	}
 
+	const toggleAllItems = () => {
+		const toAdd = [...packedItems].map(item => {
+			item.packed = false;
+			return item;
+		})
+
+		setUnpackedItems([...toAdd, ...unpackedItems]);
+		setPackedItems([]);
+
+	}
+
 	const value = [removeItem, toggleItem];
 
 	return (
@@ -54,7 +65,7 @@ const App = () => {
 					</div>
 					<div className="offset-md-2 col-md-5">
 						<ListItems title="Packed Items" items={packedItems} />
-						<button className="btn btn-danger btn-lg btn-block">
+						<button className="btn btn-danger btn-lg btn-block" onClick={toggleAllItems}>
 							Mark All As Unpacked
             </button>
 					</div>
