@@ -1,35 +1,42 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { generate as id } from "shortid";
+import AppContext from '../context/AppContext'
+import PropTypes from 'prop-types'
 
-class NewItem extends Component {
-  state = {
-    value: ""
-  };
 
-  handleChange = event => {
-    //
-  };
+const NewItem = ({ addItem }) => {
 
-  handleSubmit = event => {
-    //
-  };
+	const [value, setValue] = useState("");
 
-  render() {
-    const { value } = this.state;
+	const handleChange = ({ target }) => {
+		//
+		setValue(target.value);
+	};
 
-    return (
-      <form>
-        <div className="row">
-          <div className="col-md-10">
-            <input className="form-control mb-3" type="text" value={value} />
-          </div>
-          <div className="col-md-2">
-            <input className="btn btn-success" type="submit" value="Add item" />
-          </div>
-        </div>
-      </form>
-    );
-  }
+	const handleSubmit = event => {
+		//
+		event.preventDefault();
+		addItem(value.trim());
+		setValue('');
+	};
+
+
+	return (
+		<form onSubmit={handleSubmit}>
+			<div className="row">
+				<div className="col-md-10">
+					<input className="form-control mb-3" type="text" value={value} onChange={handleChange} />
+				</div>
+				<div className="col-md-2">
+					<input className="btn btn-success" type="submit" value="Add item" disabled={value !== '' ? false : true} />
+				</div>
+			</div>
+		</form>
+	);
+}
+
+NewItem.propTypes = {
+	addItem: PropTypes.func.isRequired
 }
 
 export default NewItem;
