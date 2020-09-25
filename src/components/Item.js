@@ -3,7 +3,7 @@ import AppContext from '../context/AppContext'
 import "./Item.css";
 
 const Item = ({ item }) => {
-	const value = useContext(AppContext);
+	const [removeItem, toggleItem] = useContext(AppContext);
 	return (
 		<li className="item-box">
 			<div className="form-check">
@@ -11,7 +11,7 @@ const Item = ({ item }) => {
 					className="form-check-input"
 					type="checkbox"
 					checked={item.packed}
-					onChange={() => { }}
+					onChange={() => toggleItem(item)}
 					id={item.id}
 				/>
 				<label className="form-check-label" htmlFor={item.id}>
@@ -19,7 +19,7 @@ const Item = ({ item }) => {
 					{item.value}
 				</label>
 			</div>
-			<button className="btn btn-secondary btn-sm" onClick={() => value(item.id, item.packed)}>
+			<button className="btn btn-secondary btn-sm" onClick={() => removeItem(item.id, item.packed)}>
 				Remove
         </button>
 		</li>

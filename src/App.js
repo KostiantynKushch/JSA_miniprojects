@@ -12,11 +12,15 @@ const App = () => {
 	const [unpackedItems, setUnpackedItems] = useState(unpacked);
 	const [packedItems, setPackedItems] = useState(packed);
 
-	const addItem = (title) => {
+	const addItem = (title, packed = false) => {
 		const newItem = {
-			value: title, id: id(), packed: false
+			value: title, id: id(), packed: packed
 		}
-		setUnpackedItems([newItem, ...unpackedItems]);
+		if (packed === false) {
+			setUnpackedItems([newItem, ...unpackedItems]);
+		} else {
+			setPackedItems([newItem, ...packedItems]);
+		}
 	}
 
 	const removeItem = (id, packed) => {
@@ -27,7 +31,18 @@ const App = () => {
 		}
 	}
 
-	const value = removeItem;
+
+	const toggleItem = (item) => {
+		if (item.packed) {
+			removeItem(item.id, item.packed);
+			addItem(item.value)
+		} else {
+			removeItem(item.id, item.packed);
+			addItem(item.value, true)
+		}
+	}
+
+	const value = [removeItem, toggleItem];
 
 	return (
 		<AppContext.Provider value={value}>
