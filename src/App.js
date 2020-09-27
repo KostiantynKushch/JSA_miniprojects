@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import NewItem from "./components/NewItem";
 import ListItems from "./components/ListItems";
 import AppContext from './context/AppContext'
@@ -12,35 +12,45 @@ const App = () => {
 	const [unpackedItems, setUnpackedItems] = useState(unpacked);
 	const [packedItems, setPackedItems] = useState(packed);
 
-	const addItem = (title, packed = false) => {
-		const newItem = {
-			value: title, id: id(), packed: packed
-		}
-		if (packed === false) {
-			setUnpackedItems([newItem, ...unpackedItems]);
-		} else {
-			setPackedItems([newItem, ...packedItems]);
-		}
-	}
+	const addItem = useCallback(
+		(title, packed = false) => {
+			const newItem = {
+				value: title, id: id(), packed: packed
+			}
+			if (packed === false) {
+				setUnpackedItems((unpackedItems) => ([newItem, ...unpackedItems]));
+			} else {
+				setPackedItems((packedItems) => ([newItem, ...packedItems]));
+			}
+		},
+		[],
+	)
 
-	const removeItem = (id, packed) => {
+
+	const removeItem = useCallback((id, packed) => {
 		if (packed) {
-			setPackedItems(packedItems.filter(item => item.id !== id));
+			setPackedItems((packedItems) => (packedItems.filter(item => item.id !== id)));
 		} else {
-			setUnpackedItems(unpackedItems.filter(item => item.id !== id));
+			setUnpackedItems((unpackedItems) => (unpackedItems.filter(item => item.id !== id)));
 		}
-	}
+	}, [])
 
 
-	const toggleItem = (item) => {
-		if (item.packed) {
-			removeItem(item.id, item.packed);
-			addItem(item.value)
-		} else {
-			removeItem(item.id, item.packed);
-			addItem(item.value, true)
-		}
-	}
+
+	const toggleItem = useCallback(
+		(item) => {
+			if (item.packed) {
+				removeItem(item.id, item.packed);
+				addItem(item.value)
+			} else {
+				removeItem(item.id, item.packed);
+				addItem(item.value, true)
+			}
+		},
+		[addItem, removeItem],
+	)
+
+
 
 	const toggleAllItems = () => {
 		const toAdd = [...packedItems].map(item => {
@@ -53,7 +63,7 @@ const App = () => {
 
 	}
 
-	const value = [removeItem, toggleItem];
+	const value = useMemo(() => ({ removeItem, toggleItem }), [removeItem, toggleItem]);
 
 	return (
 		<AppContext.Provider value={value}>

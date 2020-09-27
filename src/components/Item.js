@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, memo } from "react";
 import AppContext from '../context/AppContext'
 import "./Item.css";
 
 const Item = ({ item }) => {
-	const [removeItem, toggleItem] = useContext(AppContext);
+	const { removeItem, toggleItem } = useContext(AppContext);
 	return (
 		<li className="item-box">
 			<div className="form-check">
@@ -26,4 +26,4 @@ const Item = ({ item }) => {
 	);
 }
 
-export default Item;
+export default memo(Item);
